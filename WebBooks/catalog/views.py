@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import Book, Author, BookInstance, Genre
 from django.views import generic
 
+
 def index(request):
     # Генерация "количеств" некоторых главных обьектов
     num_books = Book.objects.all().count()
@@ -13,27 +14,29 @@ def index(request):
     # Авторы книг
     num_authors = Author.objects.count()
 
+    # Кол-во посещений этого view, посчитанное в переменной session
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+
     # Отрисовка HTML-шаблона index.html с данными внутри переменной context
     return render(request, 'index.html',
                   context={'num_books': num_books,
                            'num_instances': num_instances,
                            'num_instances_available': num_instances_available,
-                           'num_authors': num_authors},
-                            # 'num_visits': num_visits},
+                           'num_authors': num_authors,
+                           'num_visits': num_visits},
                   )
+
 
 class BookListView(generic.ListView):
     model = Book
     paginate_by = 3
 
+
 class BookDetailView(generic.DetailView):
     model = Book
+
 
 class AuthorListView(generic.ListView):
     model = Author
     paginate_by = 3
-
-
-
-
-
