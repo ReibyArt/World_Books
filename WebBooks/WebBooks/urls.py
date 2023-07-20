@@ -15,5 +15,6 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('accounts/', include('django.contrib.auth.urls'))
+    path('accounts/', include('django.contrib.auth.urls')),
+    url(r'^mybooks/$', views.LoanedBooksByUserListView.as_view(), name='my_borrowed')
 ]
